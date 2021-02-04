@@ -1,5 +1,5 @@
 import sys
-import arrayClean as ac
+import listClean as lc
 import listAllFiles as laf
 
 
@@ -9,7 +9,7 @@ def collect(res_path):
 	for file in files:
 		with open(res_path+'/'+file , 'r', encoding='utf-8') as f:
 			temp = f.read().split(',')
-			temp=ac.clean(temp)
+			temp=lc.clean(temp)
 			result=result+temp
 	with open('res/myDictionary.txt', 'w', encoding='utf-8') as o:
 		for i in range(len(result)):

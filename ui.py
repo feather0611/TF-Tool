@@ -11,11 +11,17 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QFileDialog
 from os.path import expanduser
+from datetime import datetime as dt
+
+#Custom Libraries
+import splitWords
+import collectDictionary
+import countWordFreq
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(541, 339)
+        MainWindow.resize(541, 403)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.label = QtWidgets.QLabel(self.centralwidget)
@@ -25,7 +31,7 @@ class Ui_MainWindow(object):
         self.label.setFont(font)
         self.label.setObjectName("label")
         self.label_2 = QtWidgets.QLabel(self.centralwidget)
-        self.label_2.setGeometry(QtCore.QRect(20, 60, 121, 20))
+        self.label_2.setGeometry(QtCore.QRect(20, 100, 121, 20))
         font = QtGui.QFont()
         font.setFamily("Arial")
         self.label_2.setFont(font)
@@ -35,16 +41,16 @@ class Ui_MainWindow(object):
         self.Origin_context_selButton.setGeometry(QtCore.QRect(450, 16, 71, 31))
         self.Origin_context_selButton.setObjectName("Origin_context_selButton")
         self.Split_result_selButton = QtWidgets.QPushButton(self.centralwidget)
-        self.Split_result_selButton.setGeometry(QtCore.QRect(450, 56, 71, 31))
+        self.Split_result_selButton.setGeometry(QtCore.QRect(450, 96, 71, 31))
         self.Split_result_selButton.setObjectName("Split_result_selButton")
         self.label_3 = QtWidgets.QLabel(self.centralwidget)
-        self.label_3.setGeometry(QtCore.QRect(20, 100, 111, 20))
+        self.label_3.setGeometry(QtCore.QRect(20, 140, 111, 20))
         font = QtGui.QFont()
         font.setFamily("Arial")
         self.label_3.setFont(font)
         self.label_3.setObjectName("label_3")
         self.TF_output__selButton = QtWidgets.QPushButton(self.centralwidget)
-        self.TF_output__selButton.setGeometry(QtCore.QRect(450, 96, 71, 31))
+        self.TF_output__selButton.setGeometry(QtCore.QRect(450, 136, 71, 31))
         self.TF_output__selButton.setObjectName("TF_output__selButton")
         self.Origin_context_dir = QtWidgets.QLineEdit(self.centralwidget)
         self.Origin_context_dir.setEnabled(True)
@@ -53,28 +59,42 @@ class Ui_MainWindow(object):
         self.Origin_context_dir.setObjectName("Origin_context_dir")
         self.Split_result_dir = QtWidgets.QLineEdit(self.centralwidget)
         self.Split_result_dir.setEnabled(True)
-        self.Split_result_dir.setGeometry(QtCore.QRect(140, 60, 301, 21))
+        self.Split_result_dir.setGeometry(QtCore.QRect(140, 100, 301, 21))
         self.Split_result_dir.setReadOnly(True)
         self.Split_result_dir.setObjectName("Split_result_dir")
         self.TF_output_dir = QtWidgets.QLineEdit(self.centralwidget)
         self.TF_output_dir.setEnabled(True)
-        self.TF_output_dir.setGeometry(QtCore.QRect(140, 100, 301, 21))
+        self.TF_output_dir.setGeometry(QtCore.QRect(140, 140, 301, 21))
         self.TF_output_dir.setReadOnly(True)
         self.TF_output_dir.setObjectName("TF_output_dir")
         self.hintBox = QtWidgets.QPlainTextEdit(self.centralwidget)
         self.hintBox.setEnabled(True)
-        self.hintBox.setGeometry(QtCore.QRect(20, 170, 501, 101))
+        self.hintBox.setGeometry(QtCore.QRect(20, 230, 501, 101))
         self.hintBox.setReadOnly(True)
         self.hintBox.setObjectName("hintBox")
         self.label_4 = QtWidgets.QLabel(self.centralwidget)
-        self.label_4.setGeometry(QtCore.QRect(20, 140, 111, 20))
+        self.label_4.setGeometry(QtCore.QRect(20, 200, 111, 20))
         font = QtGui.QFont()
         font.setFamily("Arial")
         self.label_4.setFont(font)
         self.label_4.setObjectName("label_4")
         self.runButton = QtWidgets.QPushButton(self.centralwidget)
-        self.runButton.setGeometry(QtCore.QRect(410, 280, 113, 32))
+        self.runButton.setGeometry(QtCore.QRect(410, 340, 113, 32))
         self.runButton.setObjectName("runButton")
+        self.Target_res_selButton = QtWidgets.QPushButton(self.centralwidget)
+        self.Target_res_selButton.setGeometry(QtCore.QRect(450, 56, 71, 31))
+        self.Target_res_selButton.setObjectName("Target_res_selButton")
+        self.label_5 = QtWidgets.QLabel(self.centralwidget)
+        self.label_5.setGeometry(QtCore.QRect(20, 60, 111, 20))
+        font = QtGui.QFont()
+        font.setFamily("Arial")
+        self.label_5.setFont(font)
+        self.label_5.setObjectName("label_5")
+        self.Target_res_dir = QtWidgets.QLineEdit(self.centralwidget)
+        self.Target_res_dir.setEnabled(True)
+        self.Target_res_dir.setGeometry(QtCore.QRect(140, 60, 301, 21))
+        self.Target_res_dir.setReadOnly(True)
+        self.Target_res_dir.setObjectName("Target_res_dir")
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
@@ -82,8 +102,10 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
         self.Origin_context_selButton.clicked.connect(lambda: self.chooseDir('origin'))
+        self.Target_res_selButton.clicked.connect(lambda: self.chooseDir('target'))
         self.Split_result_selButton.clicked.connect(lambda: self.chooseDir('split'))
         self.TF_output__selButton.clicked.connect(lambda: self.chooseDir('TF'))
+        self.runButton.clicked.connect(self.run)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -97,6 +119,8 @@ class Ui_MainWindow(object):
         self.TF_output__selButton.setText(_translate("MainWindow", "選取"))
         self.label_4.setText(_translate("MainWindow", "訊息提示"))
         self.runButton.setText(_translate("MainWindow", "執行"))
+        self.Target_res_selButton.setText(_translate("MainWindow", "選取"))
+        self.label_5.setText(_translate("MainWindow", "檢測目標目錄"))
 
     def chooseDir(self, target):
         dir = QFileDialog.getExistingDirectory(
@@ -106,8 +130,14 @@ class Ui_MainWindow(object):
                 QFileDialog.ShowDirsOnly)
         if dir!='':
             if target=='origin':
-                self.Origin_context_dir.setText(str(dir)+'/')
+                self.Origin_context_dir.setText(str(dir))
+            elif target=='target':
+                self.Target_res_dir.setText(str(dir))
             elif target=='split':
-                self.Split_result_dir.setText(str(dir)+'/')
+                self.Split_result_dir.setText(str(dir))
             elif target=='TF':
-                self.TF_output_dir.setText(str(dir)+'/')｀｀
+                self.TF_output_dir.setText(str(dir))
+
+    # def run(self): #, origin, split, tf):
+    #     self.hintBox.setPlainText('['+str(dt.now())[:-7]+']: '+'開始執行...\n')
+

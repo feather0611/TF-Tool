@@ -4,7 +4,7 @@ import importlib.util
 from os import listdir
 
 def preCheck():
-	names = ['csv','jieba','jieba.analyse','numpy']
+	names = ['csv','jieba','jieba.analyse','numpy','PyQt5']
 	for name in names:
 
 		if name in sys.modules:
