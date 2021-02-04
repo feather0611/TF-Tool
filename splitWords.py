@@ -4,14 +4,14 @@ from os import listdir
 import sys
 import jieba.analyse
 
-def split():
-    path = '/Users/firefeatherangel/Desktop/國企系/files/' #directory
-    output='/Users/firefeatherangel/Desktop/國企系/files/mode4/'
+def split(path, output):
+    # path = '/Users/firefeatherangel/Desktop/國企系/files/' #directory
+    # output='/Users/firefeatherangel/Desktop/國企系/files/mode4/'
     file = sorted(listdir(path))
     if '.DS_Store' in file:
         file.remove('.DS_Store')      #清除.DS_Store檔
     jieba.set_dictionary('res/dict.txt.big')
-    jieba.load_userdict("res/myDictionary.txt")
+    jieba.load_userdict('res/myDictionary.txt')
     for f in file:
         filepath = path + f
         if os.path.isdir(filepath):
