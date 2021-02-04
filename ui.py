@@ -99,21 +99,15 @@ class Ui_MainWindow(object):
         self.runButton.setText(_translate("MainWindow", "執行"))
 
     def chooseDir(self, target):
-        if target=='origin':
-            self.Origin_context_dir.setText(str(QFileDialog.getExistingDirectory(
+        dir = QFileDialog.getExistingDirectory(
                 None,
                 "Open a folder",
                 expanduser("~"),
-                QFileDialog.ShowDirsOnly))+'/')
-        elif target=='split':
-            self.Split_result_dir.setText(str(QFileDialog.getExistingDirectory(
-                None,
-                "Open a folder",
-                expanduser("~"),
-                QFileDialog.ShowDirsOnly))+'/')
-        elif target=='TF':
-            self.TF_output_dir.setText(str(QFileDialog.getExistingDirectory(
-                None,
-                "Open a folder",
-                expanduser("~"),
-                QFileDialog.ShowDirsOnly))+'/')
+                QFileDialog.ShowDirsOnly)
+        if dir!='':
+            if target=='origin':
+                self.Origin_context_dir.setText(str(dir)+'/')
+            elif target=='split':
+                self.Split_result_dir.setText(str(dir)+'/')
+            elif target=='TF':
+                self.TF_output_dir.setText(str(dir)+'/')｀｀
