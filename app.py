@@ -14,7 +14,7 @@ class MainWindow(QMainWindow):
 if(checkPackage.preCheck()!=0):
 	print("Error in import package!")
 	sys.exit(0)
-	
+
 if __name__ == '__main__':
     app = QApplication([])
     window = MainWindow()

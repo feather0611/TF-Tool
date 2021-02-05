@@ -9,7 +9,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QFileDialog
+from PyQt5.QtWidgets import QFileDialog, QMessageBox
 from os.path import expanduser
 from datetime import datetime as dt
 
@@ -105,7 +105,7 @@ class Ui_MainWindow(object):
         self.Target_res_selButton.clicked.connect(lambda: self.chooseDir('target'))
         self.Split_result_selButton.clicked.connect(lambda: self.chooseDir('split'))
         self.TF_output__selButton.clicked.connect(lambda: self.chooseDir('TF'))
-        self.runButton.clicked.connect(self.run)
+        self.runButton.clicked.connect()
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -128,16 +128,37 @@ class Ui_MainWindow(object):
                 "Open a folder",
                 expanduser("~"),
                 QFileDialog.ShowDirsOnly)
-        if dir!='':
-            if target=='origin':
+        if dir != '':
+            if target == 'origin':
                 self.Origin_context_dir.setText(str(dir))
-            elif target=='target':
+            elif target == 'target':
                 self.Target_res_dir.setText(str(dir))
-            elif target=='split':
+            elif target == 'split':
                 self.Split_result_dir.setText(str(dir))
-            elif target=='TF':
+            elif target == 'TF':
                 self.TF_output_dir.setText(str(dir))
 
-    # def run(self): #, origin, split, tf):
-    #     self.hintBox.setPlainText('['+str(dt.now())[:-7]+']: '+'開始執行...\n')
+    def showPopup(self, title, msg, icon="NoIcon"):
+        mbox = QMessageBox()
+        mbox.setWindowTitle(title)
+        mbox.setText(msg)
+        if icon == "Question":
+            mbox.setIcon(QMessageBox.Question)
+        elif icon == "Information":
+            mbox.setIcon(QMessageBox.Information)
+        elif icon == "Warning":
+            mbox.setIcon(QMessageBox.Warning)
+        elif icon == "Critical":
+            mbox.setIcon(QMessageBox.Critical)
+        else:
+            mbox.setIcon(QMessageBox.NoIcon)
+        x=mbox.exec_()
+    
+    def run(self, origin_path, target_path, split_path, tf_path):
+        self.hintBox.setPlainText('['+str(dt.now())[:-7]+']: '+'開始執行...\n')
+         if(self.Origin_context_dir.Text()!='' && self.Target_res_dir.Text()!='' && 
+            self.Split_result_dir.Text()  !='' && self.TF_output_dir.Text() !=''  ):
+
+         
+
 
