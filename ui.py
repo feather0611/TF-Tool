@@ -12,6 +12,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QFileDialog, QMessageBox
 from os.path import expanduser
 from datetime import datetime as dt
+import time
 
 #Custom Libraries
 import splitWords
@@ -105,7 +106,7 @@ class Ui_MainWindow(object):
         self.Target_res_selButton.clicked.connect(lambda: self.chooseDir('target'))
         self.Split_result_selButton.clicked.connect(lambda: self.chooseDir('split'))
         self.TF_output__selButton.clicked.connect(lambda: self.chooseDir('TF'))
-        self.runButton.clicked.connect()
+        self.runButton.clicked.connect(self.run)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -154,11 +155,26 @@ class Ui_MainWindow(object):
             mbox.setIcon(QMessageBox.NoIcon)
         x=mbox.exec_()
     
-    def run(self, origin_path, target_path, split_path, tf_path):
-        self.hintBox.setPlainText('['+str(dt.now())[:-7]+']: '+'開始執行...\n')
-         if(self.Origin_context_dir.Text()!='' && self.Target_res_dir.Text()!='' && 
-            self.Split_result_dir.Text()  !='' && self.TF_output_dir.Text() !=''  ):
-
+    def run(self):
+        self.hintBox.setPlainText('['+time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())+']: '+'開始執行...\n')
+        self.hintBox.setPlainText(self.hintBox.toPlainText()+'['+time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())+']: '+'檢查必填資料夾...\n')
+        if(self.Origin_context_dir.text()!='' and self.Target_res_dir.text()!='' and self.Split_result_dir.text()!='' and self.TF_output_dir.text()!=''):
+            self.hintBox.setPlainText(self.hintBox.toPlainText()+'['+time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())+']: '+'完成\n')
+            origin_path = self.Origin_context_dir.text()
+            target_path = self.Target_res_dir.text()
+            split_path = self.Split_result_dir.text()
+            tf_path = self.TF_output_dir.text()
+            self.hintBox.setPlainText(self.hintBox.toPlainText()+'['+time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())+']: '+'建立使用者自訂分詞字典...\n')
+            collectDictionary.collect(target_path)
+            self.hintBox.setPlainText(self.hintBox.toPlainText()+'['+time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())+']: '+'完成\n')
+            self.hintBox.setPlainText(self.hintBox.toPlainText()+'['+time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())+']: '+'將原始文本分詞中\n')
+            splitWords.split(origin_path, split_path)
+            self.hintBox.setPlainText(self.hintBox.toPlainText()+'['+time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())+']: '+'完成\n')
+            self.hintBox.setPlainText(self.hintBox.toPlainText()+'['+time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())+']: '+'計算詞頻並輸出中...\n')
+            self.hintBox.setPlainText(self.hintBox.toPlainText()+'['+time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())+']: '+'完成\n')
+            countWordFreq.count(target_path, split_path, tf_path)
+        else:
+            self.showPopup('注意', '有欄位未被正確填入，請檢查後重試', 'Warning')
          
 
 

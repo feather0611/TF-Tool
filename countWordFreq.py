@@ -27,8 +27,8 @@ def count(target, split, output):
 		field=['Company', 'Year', 'Total']
 		#result
 		result = []
-		tg = targets_dir_path+tg_name
-		tgn = tg_name.split('_')[0]
+		tg = targets_dir_path+'/'+tg_name
+		tgn = tg_name.split('.')[0]
 		with open(tg, 'r', encoding='utf-8') as t:
 			temp=t.read()
 			words=temp.split(',')
@@ -37,7 +37,7 @@ def count(target, split, output):
 			for te_name in text_files:	#for every file in text dir
 				#dictionary that stores result
 				dic_result = {'Company':'', 'Year':'', 'Total' :0}
-				te = text_dir_path+te_name
+				te = text_dir_path+'/'+te_name
 				info = te.split('_')
 				dic_result['Company']=str(info[1])
 				dic_result['Year']=str(info[2][:-4])
@@ -49,7 +49,7 @@ def count(target, split, output):
 						dic_result['Total']+=content.count(word)
 				result.append(dic_result)
 			ot_name = tgn+'_'+str(info[2][:-4])+'.csv'
-			with open(output_dir_path+ot_name, 'w', encoding='utf-8') as o:
+			with open(output_dir_path+'/'+ot_name, 'w', encoding='utf-8') as o:
 				d = csv.DictWriter(o, field)
 				d.writeheader()
 				for r in result:

@@ -13,7 +13,7 @@ def split(path, output):
     jieba.set_dictionary('res/dict.txt.big')
     jieba.load_userdict('res/myDictionary.txt')
     for f in file:
-        filepath = path + f
+        filepath = path+'/'+f
         if os.path.isdir(filepath):
             continue
         with open(filepath, 'rb') as i: #以bytes形式開啟檔案
@@ -26,9 +26,10 @@ def split(path, output):
                 encode = 'utf-8'
 
         #正式讀取文字
-        with open(filepath, 'r', encoding=encode) as i, open(output+'s_'+f, 'w', encoding='utf-8') as o:
+        with open(filepath, 'r', encoding=encode) as i, open(output+'/s_'+f, 'w', encoding='utf-8') as o:
             try:
                 rows = i.read()
+                rows = rows.replace('\n', '').replace(' ','').replace('\t','')
             except UnicodeDecodeError:      #依然有編碼問題時
                 print('file: '+f+' cannot be decoded.')
                 sys.exit(0)
